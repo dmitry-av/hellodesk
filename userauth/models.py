@@ -26,3 +26,7 @@ class User(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    class Meta:
+        verbose_name = 'User field'
+        verbose_name_plural = 'User fields'
