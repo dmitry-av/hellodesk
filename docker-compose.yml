@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+
+  backend:
+    build:
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./doc_env/docker.env
+    volumes:
+      - ./:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+    command:
+      - '/app/entrypoint.sh'
+    ports:
+      - 8000:8000
+  
+  redis:
+    image: redis:7.0.10-alpine
+    expose:
+      - 6379
+    restart: unless-stopped
+
+volumes:
+  static_volume:
+  media_volume:

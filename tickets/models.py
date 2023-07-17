@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-User = get_user_model()
-
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -17,7 +15,7 @@ class Ticket(models.Model):
     subject = models.TextField(max_length=200)
     details = models.TextField()
     client = models.ForeignKey(
-        User, related_name="tickets", on_delete=models.CASCADE)
+        get_user_model(), related_name="tickets", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.subject

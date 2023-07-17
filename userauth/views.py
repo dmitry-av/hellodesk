@@ -17,8 +17,8 @@ class RegisterUserAPIView(generics.CreateAPIView):
 
 
 class UserDetailAPI(APIView):
-    serializer_class = [UserSerializer]
-    authentication_classes = [JWTAuthentication]
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         baseuser = BaseUser.objects.get(pk=pk)
@@ -26,7 +26,8 @@ class UserDetailAPI(APIView):
             raise PermissionDenied(
                 "You don't have permission to access this resource.")
         user = User.objects.get(user=baseuser)
-        return Response(UserSerializer(user).data)
+        serializer = self.serializer_class(user, context={'request': request})
+        return Response(serializer.data)
 
     def get_permissions(self):
         return super().get_permissions()

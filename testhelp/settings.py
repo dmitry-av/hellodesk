@@ -18,6 +18,7 @@ ALLOWED_HOSTS = [os.environ.get("ALLOWED_HOSTS")]
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -27,7 +28,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt.token_blacklist",
-    "channels",
     "userauth",
     "tickets",
     "chats",
@@ -62,7 +62,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "testhelp.wsgi.application"
-ASGI_APPLICATION = 'testhelp.asgi.application'
+ASGI_APPLICATION = "testhelp.asgi.application"
 
 
 # Database
@@ -122,7 +122,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication"
     ],
@@ -137,3 +136,13 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = 'userauth.BaseUser'
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_SERVER', 'redis://localhost:6379')],
+        },
+    },
+}

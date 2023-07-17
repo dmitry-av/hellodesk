@@ -11,7 +11,7 @@ class TicketAdmin(admin.ModelAdmin):
     def chat_link(self, obj):
         chat = obj.chat
         if chat:
-            chat_url = reverse('chat-detail', args=[obj.chat.id])
+            chat_url = reverse('chat-room', args=[obj.chat.id])
             full_chat_url = self.admin_site.site_url + chat_url
             return format_html('<a href="{}">{}</a>', chat_url, chat_url)
         return None

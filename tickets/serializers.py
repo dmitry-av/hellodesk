@@ -22,9 +22,11 @@ class TicketSerializer(serializers.ModelSerializer):
         fields = ('subject', 'details', 'client', 'category', 'chat')
 
     def get_chat(self, ticket):
-        chat = Chat.objects.filter(ticket=ticket).first()
+        chat = Chat.objects.get(ticket=ticket)
         if chat:
             request = self.context.get('request')
-            chat_url = reverse('chat-detail', args=[chat.pk], request=request)
-            return chat_url
+            chat_url = reverse(
+                'chat-websocket', urlconf='chats.routing', args=[chat.pk], request=request)
+            websocket_url = chat_url.replace('http', 'ws', 1)
+            return websocket_url
         return None

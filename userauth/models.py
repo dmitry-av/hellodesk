@@ -23,10 +23,12 @@ class User(models.Model):
         BaseUser, on_delete=models.CASCADE, primary_key=True)
     avatar = models.ImageField(upload_to=photo_path)
     date_of_birth = models.DateField()
+    manager_chat = models.OneToOneField(
+        "chats.Chat", on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.user.username
 
     class Meta:
-        verbose_name = 'User field'
-        verbose_name_plural = 'User fields'
+        verbose_name = 'Client'
+        verbose_name_plural = 'Clients'

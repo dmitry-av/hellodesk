@@ -2,6 +2,8 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import serializers
 
+from userauth.models import User
+
 from .models import Category, Ticket
 from chats.models import Chat
 from .serializers import TicketSerializer
@@ -27,9 +29,10 @@ class TicketViewSet(viewsets.ModelViewSet):
         category = Category.objects.get(name=category_name)
         serializer.validated_data['category'] = category
         subject = serializer.validated_data['subject']
-        user = self.request.user
-        if Ticket.objects.filter(subject=subject, client=user).exists():
+        baseuser = self.request.user
+        user = baseuser.user
+        if Ticket.objects.filter(subject=subject, client=baseuser).exists():
             raise serializers.ValidationError(
                 "A ticket with the same subject already exists for the user.")
-        ticket = serializer.save(client=user)
+        ticket = serializer.save(client=baseuser)
         Chat.objects.create(ticket=ticket, client=user)
